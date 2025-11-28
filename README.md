@@ -1,6 +1,3 @@
-# Template
-This repository serves as a testing ground.
-
 ## Building
 ### Prerequisites
 #### Bazel
