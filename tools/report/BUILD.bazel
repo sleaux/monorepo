@@ -1,0 +1,12 @@
+sh_binary(
+    name = "report",
+    srcs = ["report.sh"],
+    data = [
+        "//modules/replication/src/client",
+        "//modules/replication/src/server",
+    ],
+    env = {
+        "CLIENT": "$(location //modules/replication/src/client:client)",
+        "SERVER": "$(location //modules/replication/src/server:server)",
+    },
+)

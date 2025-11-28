@@ -1,0 +1,99 @@
+bazel_dep(name = "abseil-cpp", version = "20250512.1")
+bazel_dep(name = "aspect_bazel_lib", version="2.7.7")
+bazel_dep(name = "aspect_rules_lint", version = "1.5.3")
+bazel_dep(name = "aspect_rules_js", version = "2.8.1")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "buildifier_prebuilt", version = "6.3.3")
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "google_benchmark", version = "1.9.4")
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_buf", version = "0.5.2")
+bazel_dep(name = "rules_cc", version = "0.2.11")
+bazel_dep(name = "rules_multirun", version = "0.12.0")
+bazel_dep(name = "rules_proto_grpc_cpp", version = "5.6.0")
+bazel_dep(name = "rules_zig", version = "0.12.2")
+bazel_dep(name = "toolchains_llvm", version = "0.10.3")
+bazel_dep(name = "rules_p", version = "0.0.1")
+local_path_override(
+    module_name = "rules_p",
+    path = "modules/rules_p/",
+)
+
+p = use_extension("@rules_p//p:extensions.bzl", "p")
+p.toolchain(p_version = "3.0.0")
+use_repo(p, "p_toolchains")
+
+register_toolchains("@p_toolchains//:all")
+
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "02d15621b528efd877f5d5657c4b738523a0eb17",
+    remote = "https://github.com/mikael-s-persson/bazel-compile-commands-extractor.git",
+    # Replace the commit hash (above) with the latest (https://github.com/hedronvision/bazel-compile-commands-extractor/commits/main).
+    # Even better, set up Renovate and let it do the work for you (see "Suggestion: Updates" in the README).
+)
+
+# bazel_dep(name = "toolchains_buildbuddy")
+# git_override(
+#     module_name = "toolchains_buildbuddy",
+#     commit = "66146a3015faa348391fcceea2120caa390abe03",
+#     remote = "https://github.com/buildbuddy-io/buildbuddy-toolchain.git",
+# )
+# buildbuddy = use_extension("@toolchains_buildbuddy//:extensions.bzl", "buildbuddy")
+# buildbuddy.platform(buildbuddy_container_image = "UBUNTU24_04_IMAGE") # Must match --experimental_docker_image
+
+# Configure and register the toolchain.
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    llvm_versions = {
+        "": "16.0.0",
+    },
+)
+use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
+# register_toolchains("@llvm_toolchain//:all")
+
+buf = use_extension("@rules_buf//buf:extensions.bzl", "buf")
+buf.toolchains(version = "v1.34.0")
+use_repo(buf, "rules_buf_toolchains")
+
+bazel_dep(name = "hermetic_cc_toolchain", version = "4.0.1")
+
+toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
+use_repo(toolchains, "zig_sdk")
+
+register_toolchains(
+    "@zig_sdk//toolchain/...",
+    "@zig_sdk//libc_aware/toolchain/...",
+)
+
+pnpm = use_extension(
+    "@aspect_rules_js//npm:extensions.bzl",
+    "pnpm",
+    dev_dependency = True,
+)
+pnpm.pnpm(
+    name = "pnpm",
+    pnpm_version = "9.15.9",
+    pnpm_version_integrity = "sha512-aARhQYk8ZvrQHAeSMRKOmvuJ74fiaR1p5NQO7iKJiClf1GghgbrlW1hBjDolO95lpQXsfF+UA+zlzDzTfc8lMQ==",
+)
+use_repo(pnpm, "pnpm")
+
+npm = use_extension(
+    "@aspect_rules_js//npm:extensions.bzl",
+    "npm",
+    dev_dependency = True,
+)
+npm.npm_translate_lock(
+    name = "npm",
+    bins = {
+        # derived from "bin" attribute in node_modules/http-server/package.json
+        "http-server": [
+            "http-server=./bin/http-server",
+        ],
+    },
+    npmrc = "//:.npmrc",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+)
+use_repo(npm, "npm")

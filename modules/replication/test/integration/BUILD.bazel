@@ -1,0 +1,8 @@
+sh_test(
+    name = "simple",
+    srcs = ["simple.sh"],
+    data = [
+        "//modules/replication/src/client",
+        "//modules/replication/src/server",
+    ],
+)

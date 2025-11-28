@@ -1,0 +1,5 @@
+filegroup(
+    name = "parser",
+    srcs = glob(["*.cs"]),
+    visibility = ["//visibility:public"],
+)

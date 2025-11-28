@@ -1,0 +1,31 @@
+etc/coverage/
+model/generated/
+model/results/
+.bazelrc.buildbuddy
+.bazelrc.local
+
+bazel-bin
+bazel-monorepo
+bazel-out
+bazel-testlogs
+external
+
+# Terraform State Files
+*.tfstate
+*.tfstate.backup
+# Local Terraform Directories
+.terraform/
+# Terraform Crash Log Files
+crash.log
+# Terraform Variable Definition Files (if they contain sensitive data)
+# Consider committing these if they are not sensitive and provide environment-specific configuration
+# *.tfvars
+# Terraform Override Files
+*.tfoverride
+# Terraform Plan Files
+*.tfplan
+# Terraform CLI Configuration Files
+.terraformrc
+terraform.rc
+# Environment-specific files (e.g., for local development)
+.envrc

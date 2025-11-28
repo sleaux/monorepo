@@ -1,0 +1,12 @@
+group deps
+    framework: net8.0,
+    storage: none
+    source https://api.nuget.org/v3/index.json
+
+    nuget Microsoft.Coyote 1.7.11
+    nuget Antlr4 4.6.6
+    nuget LanguageExt.Core 5.0.0-beta-01
+    nuget LiteDB 5.0.21
+    nuget System.Runtime.Loader 4.3.0
+    nuget System.ValueTuple 4.5.0
+    nuget Microsoft.NETCore.Targets 3.1.0

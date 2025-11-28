@@ -1,0 +1,14 @@
+# Reference: https://github.com/aspect-build/rules_lint/blob/v1.6.0/example/tools/format/BUILD.bazel
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
+
+format_multirun(
+    name = "format",
+    c = "@llvm_toolchain_llvm//:bin/clang-format",
+    cc = "@llvm_toolchain_llvm//:bin/clang-format",
+    protocol_buffer = "//tools/lint:buf",
+    python = "@aspect_rules_lint//format:ruff",
+    shell = "@aspect_rules_lint//format:shfmt",
+    starlark = "@buildifier_prebuilt//:buildifier",
+    terraform = "@aspect_rules_lint//format:terraform",
+    visibility = ["//:__subpackages__"],
+)

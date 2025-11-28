@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package foo;
+
+service Foo {
+  rpc Set(SetRequest) returns (SetReply) {}
+  rpc Get(GetRequest) returns (GetReply) {}
+}
+
+message SetRequest {
+  int32 value = 1;
+}
+
+message SetReply {
+  bool successful = 1;
+}
+
+message GetRequest {}
+
+message GetReply {
+  int32 value = 1;
+}

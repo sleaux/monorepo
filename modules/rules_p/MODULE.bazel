@@ -1,0 +1,16 @@
+module(
+    name = "rules_p",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "rules_dotnet", version = "0.19.2")
+bazel_dep(name = "platforms", version = "1.0.0")
+
+dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
+dotnet.toolchain(dotnet_version = "8.0.200")
+use_repo(dotnet, "dotnet_toolchains")
+
+register_toolchains("@dotnet_toolchains//:all")
+
+deps_extension = use_extension("//p/dependencies/3.0.0/paket/deps:paket.deps_extension.bzl", "deps_extension")
+use_repo(deps_extension, "paket.deps")

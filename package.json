@@ -1,0 +1,24 @@
+{
+  "name": "ibazel_livereload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ibazel run server",
+    "update-lockfile": "pnpm install --lockfile-only"
+  },
+  "author": "TheGrizzlyDev (https://github.com/TheGrizzlyDev)",
+  "license": "ISC",
+  "devDependencies": {
+    "@bazel/ibazel": "^0.23.7",
+    "pnpm": "^9.13.0",
+    "string-replace-middleware": "^1.0.2"
+    },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+    ]
+  }
+}

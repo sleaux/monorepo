@@ -1,0 +1,23 @@
+default:
+  image:
+    name: gcr.io/bazel-public/bazel:8.3.1
+    entrypoint: [""]
+  before_script:
+    - echo "build --remote_header=x-buildbuddy-api-key=$BUILD_BUDDY_API_KEY" > .bazelrc.buildbuddy
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - bazel version
+    - bazel build //...
+  when: manual
+
+test:
+  stage: test
+  script:
+    - bazel test //...
+  when: manual
