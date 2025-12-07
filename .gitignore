@@ -9,7 +9,7 @@ bazel-monorepo
 bazel-out
 bazel-testlogs
 external
-
+compile_commands.json
 # Terraform State Files
 *.tfstate
 *.tfstate.backup

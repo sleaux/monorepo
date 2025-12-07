@@ -1,0 +1,9 @@
+load("@rules_p//p:defs.bzl", "p_project", "p_test")
+
+p_project(
+    name = "cas-paxos",
+    srcs = glob(["**/*.p"]),
+)
+
+
+

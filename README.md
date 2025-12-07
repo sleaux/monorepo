@@ -7,11 +7,6 @@ chmod +x bazelisk
 sudo mv bazelisk /usr/local/bin/bazel
 ```
 
-#### BuildBuddy remote execution (optional)
-```
-echo "build --remote_header=x-buildbuddy-api-key=$BUILD_BUDDY_API_KEY" > .bazelrc.buildbuddy
-```
-
 ### Build
 ```
 bazel build //...
@@ -73,31 +68,3 @@ terraform apply
 ```bash
 terraform destroy
 ```
-
-## Roadmap
-Basic paxos
-* "I am the leader"
-
-Things I want to do with this:
-* Dynamic simulation testing
-* P model to implementation checker, for model, tests, and continuous.
-* Profiling and continuous profiling
-
-
-Workspace setup todos:
-* Easier clangd?
-* Performance, binary size metrics
-* Linting/formatting, enforce on commit
-    * clang-format
-    * clang-tidy - not quite right, keeps removing headers that are needed
-    * https://raw.githubusercontent.com/cpplint/cpplint/HEAD/cpplint.py
-    * lint/format as tests? seems nice. https://github.com/aspect-build/rules_lint/blob/129f3645b6f21b1f7c518ccf5e179aeb9ff720fc/example/tools/format/BUILD.bazel#L123
-
-Deployment
-* Finish terraform for infra
-* Kubernetes or no?
-* Zero-downtime deployment, rollback, etc. GitLab looks like it has some features here.
-
-NPM and web
-* I don't like having to `npx pnpm install --lockfile-only` outside of bazel.
-* The whole npm/bazel/ibazel thing is not figured out.
