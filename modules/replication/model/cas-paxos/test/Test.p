@@ -1,5 +1,3 @@
-
-
 machine Basic {
     start state Init {
         entry {
@@ -12,3 +10,6 @@ machine Basic {
         }
     }
 }
+
+test testBasic [main = Basic]:
+    assert HistoryIsLinearizable in (union CasPaxos, {Basic});
