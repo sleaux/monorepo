@@ -4,6 +4,3 @@ p_project(
     name = "cas-paxos",
     srcs = glob(["**/*.p"]),
 )
-
-
-
