@@ -1,18 +1,19 @@
 machine Client {
-    var f: tChangeFunction;
+    var value: int;
     var proposer: set[Proposer];
     var broadcast: tBroadcast;
 
     start state init {
-        entry(broadcast: tBroadcast) {
-            broadcast = broadcast;
+        entry(setup: (broadcast: tBroadcast, proposer: Proposer)) {
+            broadcast = setup.broadcast;
+            proposer += (setup.proposer);
             goto Change;
         }
     }
 
     state Change {
         entry {
-            Broadcast(broadcast, proposer, eChangeRequest, (client = this, f = f));
+            Broadcast(broadcast, proposer, eChangeRequest, (client = this, value = value));
         }
 
         on eChangeResponse do (response: tChangeResponse) {

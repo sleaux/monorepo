@@ -1,8 +1,7 @@
 machine Proposer {
-    var ballot: tBallot;
-    var ballot_highest: tBallot;
+    var timestamp: int;
     var f: tChangeFunction;
-    var s: tState;
+    var value: int;
 
     var broadcast: tBroadcast;
     var acceptors: set[Acceptor];
@@ -12,9 +11,10 @@ machine Proposer {
     var client: set[Client];
 
     start state Init {
-        entry(broadcast: tBroadcast) {
-            broadcast = broadcast;
-            ballot_highest = 0;
+        entry(setup: (broadcast: tBroadcast, acceptors: set[Acceptor])) {
+            broadcast = setup.broadcast;
+            acceptors = setup.acceptors;
+            timestamp = 0;
             goto Wait;
         }
    }
@@ -26,7 +26,7 @@ machine Proposer {
         }
 
         on eChangeRequest do (request: tChangeRequest) {
-            f = request.f;
+            f = request.value;
             client += (request.client);
             goto Prepare; 
         }
@@ -36,9 +36,8 @@ machine Proposer {
 
     state Prepare {
         entry {
-            ballot = ballot_highest + 1;
-            ballot_highest = ballot;
-            Broadcast(broadcast, acceptors, ePrepareRequest, (proposer = this, ballot = ballot));
+            timestamp = timestamp + 1;
+            Broadcast(broadcast, acceptors, ePrepareRequest, (proposer = this, timestamp = timestamp));
         }
 
         on ePrepareResponse do (response: tPrepareResponse) {
@@ -49,7 +48,7 @@ machine Proposer {
                 }
             } else {
                 // Tell client it failed by returning a non-modified state.
-                Broadcast(broadcast, client, eChangeResponse, (proposer = this, value = s));
+                Broadcast(broadcast, client, eChangeResponse, (proposer = this, value = value));
                 goto Wait;
             }
         }
@@ -58,15 +57,15 @@ machine Proposer {
     state Accept {
         entry {
             // Apply f to state
-            s = f;
-            Broadcast(broadcast, acceptors, eAcceptRequest, (proposer = this, ballot = ballot, new_state = s));
+            value = f;
+            Broadcast(broadcast, acceptors, eAcceptRequest, (proposer = this, timestamp = timestamp, value = value));
         }
 
         on eAcceptResponse do (response: tAcceptResponse) {
-            if (response.confirmed) {
+            if (response.value == value) {
                 accept_acks += (response.acceptor);
                 if (sizeof(accept_acks) >= sizeof(acceptors) / 2 + 1) {
-                    Broadcast(broadcast, client, eChangeResponse, (proposer = this, value = s));
+                    Broadcast(broadcast, client, eChangeResponse, (proposer = this, value = value));
                     goto Wait;
                 }
             }
