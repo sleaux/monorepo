@@ -90,8 +90,6 @@ class SantaApp(App):
         self.progress()
 
 
-
-
 if __name__ == "__main__":
     app = SantaApp()
     app.run()
