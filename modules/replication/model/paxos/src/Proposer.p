@@ -7,7 +7,7 @@ machine Proposer {
     var majority: int;
     var prepare_acks: set[Acceptor];
     var accept_acks: set[Acceptor];
-    var broadcast_kind: tBroadcast;
+    var broadcast_kind: tReliability;
 
     start state Init {
         entry(config : tProposerConfig) {

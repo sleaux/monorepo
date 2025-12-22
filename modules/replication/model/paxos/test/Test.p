@@ -1,4 +1,4 @@
-type tPaxosConfig = (number_proposers: int, number_acceptors: int, number_learners: int, broadcast_kind: tBroadcast);
+type tPaxosConfig = (number_proposers: int, number_acceptors: int, number_learners: int, broadcast_kind: tReliability);
 event ePaxosConfig: (qourum: int);
 
 fun SetupPaxos(config: tPaxosConfig) {

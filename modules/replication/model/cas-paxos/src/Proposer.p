@@ -3,7 +3,7 @@ machine Proposer {
     var f: tChangeFunction;
     var value: int;
 
-    var broadcast: tBroadcast;
+    var broadcast: tReliability;
     var acceptors: set[Acceptor];
     var accept_acks: set[Acceptor];
     var prepare_acks: set[Acceptor];
@@ -11,7 +11,7 @@ machine Proposer {
     var client: set[Client];
 
     start state Init {
-        entry(setup: (broadcast: tBroadcast, acceptors: set[Acceptor])) {
+        entry(setup: (broadcast: tReliability, acceptors: set[Acceptor])) {
             broadcast = setup.broadcast;
             acceptors = setup.acceptors;
             timestamp = 0;

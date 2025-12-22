@@ -1,9 +1,9 @@
 type tBallot = int;
 type tValue = int;
 
-type tProposerConfig = (broadcast_kind: tBroadcast, jury: set[Acceptor], school: set[Learner], value_to_propose: tValue, id_proposer: int);
-type tAcceptorConfig = (broadcast_kind: tBroadcast);
-type tLearnerConfig = (broadcast_kind: tBroadcast);
+type tProposerConfig = (broadcast_kind: tReliability, jury: set[Acceptor], school: set[Learner], value_to_propose: tValue, id_proposer: int);
+type tAcceptorConfig = (broadcast_kind: tReliability);
+type tLearnerConfig = (broadcast_kind: tReliability);
 
 type tPrepareRequest = (proposer: Proposer, number_ballot: tBallot, value: tValue);
 event ePrepareRequest: tPrepareRequest;

@@ -2,7 +2,7 @@ machine Acceptor {
     var number_prepared: tBallot;
     var value_accepted: tValue;
     var number_accepted: tBallot;
-    var broadcast_kind: tBroadcast;
+    var broadcast_kind: tReliability;
 
     start state Init {
         entry (config: tAcceptorConfig){

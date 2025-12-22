@@ -1,6 +1,6 @@
-enum tBroadcast {Unreliable, UnreliableMulti, Reliable, ReliableMajority}
+enum tReliability {Unreliable, UnreliableMulti, Reliable, ReliableMajority}
 
-fun Broadcast(broadcast: tBroadcast, machines: set[machine], e: event, payload: any) {
+fun Broadcast(broadcast: tReliability, machines: set[machine], e: event, payload: any) {
     assert sizeof(machines) > 0;
     if (broadcast == Unreliable) {
         BroadcastUnreliable(machines, e, payload);
@@ -16,6 +16,28 @@ fun Broadcast(broadcast: tBroadcast, machines: set[machine], e: event, payload: 
     }
     if (broadcast == ReliableMajority) {
         BroadcastReliableMajority(machines, e, payload);
+        return;
+    }
+    assert false;
+}
+
+fun Send(broadcast: tReliability, m: machine, e: event, payload: any) {
+    var M: set[machine];
+    M += (m);
+    if (broadcast == Unreliable) {
+        BroadcastUnreliable(M, e, payload);
+        return;
+    }
+    if (broadcast == UnreliableMulti) {
+        BroadcastUnreliableMulti(M, e, payload);
+        return;
+    }
+    if (broadcast == Reliable) {
+        BroadcastReliable(M, e, payload);
+        return;
+    }
+    if (broadcast == ReliableMajority) {
+        BroadcastReliableMajority(M, e, payload);
         return;
     }
     assert false;

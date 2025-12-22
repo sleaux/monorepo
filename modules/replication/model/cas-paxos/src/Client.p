@@ -1,10 +1,10 @@
 machine Client {
     var value: int;
     var proposer: set[Proposer];
-    var broadcast: tBroadcast;
+    var broadcast: tReliability;
 
     start state init {
-        entry(setup: (broadcast: tBroadcast, proposer: Proposer, value: int)) {
+        entry(setup: (broadcast: tReliability, proposer: Proposer, value: int)) {
             broadcast = setup.broadcast;
             proposer += (setup.proposer);
             value = setup.value;

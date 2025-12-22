@@ -1,6 +1,6 @@
 machine Learner {
     var value_learned: tValue;
-    var broadcast_kind: tBroadcast;
+    var broadcast_kind: tReliability;
 
     start state Init {
         entry(config: tLearnerConfig) {
