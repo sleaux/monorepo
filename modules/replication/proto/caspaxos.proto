@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package caspaxos;
+
+service Server {
+  rpc Prepare(PrepareRequest) returns (PrepareResponse) {}
+  rpc Accept(AcceptRequest) returns (AcceptResponse) {}
+  rpc Change(ChangeRequest) returns (ChangeResponse) {}
+}
+
+message PrepareRequest {
+  int32 timestamp = 1;
+}
+
+message PrepareResponse {
+  int32 timestamp = 1;
+  bool confirmed = 2;
+}
+
+message AcceptRequest {
+  int32 timestamp = 1;
+  int32 value = 2;
+}
+
+message AcceptResponse {
+  int32 timestamp = 1;
+  int32 value = 2;
+}
+
+message ChangeRequest {
+  int32 timestamp = 1;
+}
+
+message ChangeResponse {
+  int32 timestamp = 1;
+  int32 value = 2;
+}
