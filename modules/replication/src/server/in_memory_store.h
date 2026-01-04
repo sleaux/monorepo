@@ -5,11 +5,12 @@
 
 class InMemoryStore : public Store {
   public:
-    void Set(const Key& key, const Value& value) override;
-    Value Get(const Key& key) override;
-    bool Has(const Key& key) override;
+    void Set(const Key&, const Value&) override;
+    Value Get(const Key&) override;
+    bool Has(const Key&) override;
+    void Delete(const Key&) override;
 
   private:
-    std::map<std::byte, std::byte> store_;
+    std::map<std::vector<std::byte>, std::vector<std::byte>> store_;
     std::mutex mutex_;
 };

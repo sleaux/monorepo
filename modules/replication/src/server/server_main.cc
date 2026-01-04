@@ -28,8 +28,15 @@ int main(int argc, char* argv[]) {
 
     MingleNodes(node0, node1, node2);
 
-    LOG(INFO) << std::to_integer<int>(
-        node2->Change(std::byte{0}, noop).AsByte());
+    LOG(INFO) << "Trying no-op change.";
+
+    Key key({std::byte{0}});
+    auto result = node2->Change(key, noop);
+    if (result.ok()) {
+        LOG(INFO) << "OK";
+    } else {
+        LOG(ERROR) << result.status();
+    }
 
     return 0;
 }

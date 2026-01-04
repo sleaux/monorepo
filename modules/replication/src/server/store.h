@@ -1,30 +1,33 @@
 #pragma once
 #include <cstddef>
 #include <optional>
+#include <vector>
 
 class Key {
   public:
-    Key(std::byte value) : value_(value) {}
-    inline std::byte AsByte() const { return value_; }
+    Key(const std::vector<std::byte> value) : value_(value) {}
+    inline std::vector<std::byte> AsBytes() const { return value_; }
 
   private:
-    std::byte value_;
+    std::vector<std::byte> value_;
 };
 
 class Value {
   public:
-    Value(std::byte value) : value_(value) {}
-    Value() = default;
+    Value(const std::vector<std::byte> value) : value_(value) {}
+    Value() {};
+    inline std::vector<std::byte> AsBytes() const { return value_.value(); }
     inline bool Exists() const { return value_.has_value(); }
-    inline std::byte AsByte() const { return value_.value(); }
 
   private:
-    std::optional<std::byte> value_;
+    std::optional<std::vector<std::byte>> value_;
 };
 
 class Store {
   public:
+    // TODO, improve interface to support failure reading/writing to the store
     virtual void Set(const Key& key, const Value& value) = 0;
+    virtual void Delete(const Key& key) = 0;
     virtual Value Get(const Key& key) = 0;
     virtual bool Has(const Key& key) = 0;
     virtual ~Store() {};

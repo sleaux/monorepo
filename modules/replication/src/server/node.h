@@ -4,10 +4,13 @@
 #include <mutex>
 #include <set>
 
+#include "absl/status/statusor.h"
 #include "ballot.h"
 #include "change_function.h"
 #include "store.h"
 #include "transport.h"
+
+using absl::StatusOr;
 class Node;
 
 class Node {
@@ -19,23 +22,27 @@ class Node {
     inline void AddNodes(Nodes... nodes) {
         nodes_ = {nodes...};
     }
-    PrepareResponse Prepare(PrepareRequest);
-    AcceptResponse Accept(AcceptRequest);
-    Value Change(const Key&, const ChangeFunction&);
+    StatusOr<PrepareResponse> Prepare(PrepareRequest);
+    StatusOr<AcceptResponse> Accept(AcceptRequest);
+    StatusOr<Value> Change(const Key&, const ChangeFunction&);
     inline std::shared_ptr<Transport> Transport() { return transport_; }
 
   private:
-    Value SendPrepare(const Key&);
-    Value SendAccept(const Key&, const Value&, const ChangeFunction&);
+    StatusOr<Value> SendPrepare(const Key&);
+    StatusOr<Value> SendAccept(const Key&, const Value&);
 
     inline Key BallotAcceptedKey(const Key& key) {
-        return Key(static_cast<std::byte>(
-            static_cast<unsigned char>(key.AsByte()) + 100));
+        // TODO, strategy to reserve keys
+        auto buffer = key.AsBytes();
+        buffer.push_back(std::byte{0});
+        return Key(buffer);
     }
 
     inline Key BallotPromisedKey(const Key& key) {
-        return Key(static_cast<std::byte>(
-            static_cast<unsigned char>(key.AsByte()) + 200));
+        // TODO, strategy to reserve keys
+        auto buffer = key.AsBytes();
+        buffer.push_back(std::byte{1});
+        return Key(buffer);
     }
 
     uint64_t id_;

@@ -9,5 +9,6 @@ cc_binary(
         "@abseil-cpp//absl/flags:usage",
         "@abseil-cpp//absl/log",
         "@abseil-cpp//absl/log:initialize",
+        "@abseil-cpp//absl/status:statusor",
     ],
 )
