@@ -13,62 +13,54 @@ void Node::AddTransport(std::unique_ptr<class ::Transport> transport) {
 }
 
 PrepareResponse Node::Prepare(PrepareRequest request) {
+    // TODO Improve to be lock per key
     std::lock_guard<std::mutex> lock(mutex_);
 
     auto key = request.Key();
-    auto key_ballot_accepted = KeyBallotAccepted(key);
-    auto key_ballot_promised = KeyBallotPromised(key);
+    auto ballot_accepted_key = BallotAcceptedKey(key);
+    auto ballot_promised_key = BallotPromisedKey(key);
+    Value value;
+    Value ballot_accepted_value;
+    Value ballot_promised_value;
 
-    std::byte state_current;
     if (store_->Has(key)) {
-        state_current = store_->Get(key);
-    } else {
-        state_current = std::byte{0};
+        value = store_->Get(key);
     }
 
-    if (store_->Has(key_ballot_accepted)) {
-        // already accepted this ballot
-        return PrepareResponse();
-    } else {
+    if (store_->Has(ballot_accepted_key)) {
+        ballot_accepted_value = store_->Get(ballot_accepted_key);
     }
 
-    return PrepareResponse();
+    if (store_->Has(ballot_promised_key)) {
+        ballot_promised_value = store_->Get(ballot_promised_key);
+    }
+
+    return PrepareResponse(id_, true);
 }
 
-AcceptResponse Node::Accept(AcceptRequest request) { return AcceptResponse(); }
-
-std::byte Node::Propose(std::byte key, ChangeFunction f) {
-    auto state_current = SendPrepare(key);
-
-    auto state_new = SendAccept(key, state_current, f);
-
-    return state_new;
+AcceptResponse Node::Accept(AcceptRequest request) {
+    // TODO
+    return AcceptResponse(id_);
 }
 
-std::byte Node::SendPrepare(std::byte key) {
-    return std::byte{0};
+Value Node::Change(const Key& key, const ChangeFunction& f) {
+    auto value_current = SendPrepare(key);
 
+    return SendAccept(key, value_current, f);
+}
+
+Value Node::SendPrepare(const Key& key) {
+    // TODO
     auto acceptors_count = nodes_.size();
-
-    if (acceptors_count < 3) {
-    }
+    auto confirmations_needed = (acceptors_count - 1) / 2 + 1;
 
     ballot_.Increment();
 
-    int confirmations = 0;
-    for (const auto& node : nodes_) {
-        PrepareResponse response =
-            node->Transport()->SendPrepare(PrepareRequest(ballot_, key));
-
-        if (true) {
-            confirmations++;
-        } else {
-            // capture higher ballots
-        }
-    }
+    return Value(std::byte{0});
 }
 
-std::byte Node::SendAccept(std::byte key, std::byte state_current,
-                           ChangeFunction f) {
-    return std::byte{0};
+Value Node::SendAccept(const Key& key, const Value& state_current,
+                       const ChangeFunction& f) {
+    // TODO
+    return Value(std::byte{0});
 }

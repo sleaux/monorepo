@@ -1,5 +1,6 @@
 #pragma once
-#include <cstddef>
 #include <functional>
 
-using ChangeFunction = std::function<std::byte(std::byte)>;
+#include "store.h"
+
+using ChangeFunction = std::function<Value(Value)>;

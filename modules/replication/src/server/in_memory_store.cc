@@ -1,19 +1,18 @@
 #include "in_memory_store.h"
 
-#include <cstddef>
 #include <mutex>
 
-std::byte InMemoryStore::Get(std::byte key) {
+Value InMemoryStore::Get(const Key& key) {
     std::lock_guard<std::mutex> lock(mutex_);
-    return store_.at(key);
+    return Value(store_.at(key.AsByte()));
 }
 
-void InMemoryStore::Set(std::byte key, std::byte value) {
+void InMemoryStore::Set(const Key& key, const Value& value) {
     std::lock_guard<std::mutex> lock(mutex_);
-    store_[key] = value;
+    store_[key.AsByte()] = value.AsByte();
 }
 
-bool InMemoryStore::Has(std::byte key) {
+bool InMemoryStore::Has(const Key& key) {
     std::lock_guard<std::mutex> lock(mutex_);
-    return store_.find(key) != store_.end();
+    return store_.find(key.AsByte()) != store_.end();
 }

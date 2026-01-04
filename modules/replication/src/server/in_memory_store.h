@@ -5,9 +5,9 @@
 
 class InMemoryStore : public Store {
   public:
-    void Set(std::byte key, std::byte value) override;
-    std::byte Get(std::byte key) override;
-    bool Has(std::byte key) override;
+    void Set(const Key& key, const Value& value) override;
+    Value Get(const Key& key) override;
+    bool Has(const Key& key) override;
 
   private:
     std::map<std::byte, std::byte> store_;

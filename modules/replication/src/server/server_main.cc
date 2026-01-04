@@ -11,7 +11,7 @@
 #include "in_process_transport.h"
 #include "node.h"
 
-std::byte noop(std::byte value) { return value; }
+Value noop(const Value& value) { return value; }
 
 int main(int argc, char* argv[]) {
     absl::ParseCommandLine(argc, argv);
@@ -28,7 +28,8 @@ int main(int argc, char* argv[]) {
 
     MingleNodes(node0, node1, node2);
 
-    LOG(INFO) << std::to_integer<int>(node2->Propose(std::byte{0}, noop));
+    LOG(INFO) << std::to_integer<int>(
+        node2->Change(std::byte{0}, noop).AsByte());
 
     return 0;
 }

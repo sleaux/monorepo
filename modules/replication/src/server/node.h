@@ -21,19 +21,21 @@ class Node {
     }
     PrepareResponse Prepare(PrepareRequest);
     AcceptResponse Accept(AcceptRequest);
-    std::byte Propose(std::byte, ChangeFunction);
+    Value Change(const Key&, const ChangeFunction&);
     inline std::shared_ptr<Transport> Transport() { return transport_; }
 
   private:
-    std::byte SendPrepare(std::byte);
-    std::byte SendAccept(std::byte, std::byte, ChangeFunction);
+    Value SendPrepare(const Key&);
+    Value SendAccept(const Key&, const Value&, const ChangeFunction&);
 
-    inline std::byte KeyBallotAccepted(std::byte key) {
-        return static_cast<std::byte>(static_cast<unsigned char>(key) + 100);
+    inline Key BallotAcceptedKey(const Key& key) {
+        return Key(static_cast<std::byte>(
+            static_cast<unsigned char>(key.AsByte()) + 100));
     }
 
-    inline std::byte KeyBallotPromised(std::byte key) {
-        return static_cast<std::byte>(static_cast<unsigned char>(key) + 200);
+    inline Key BallotPromisedKey(const Key& key) {
+        return Key(static_cast<std::byte>(
+            static_cast<unsigned char>(key.AsByte()) + 200));
     }
 
     uint64_t id_;
